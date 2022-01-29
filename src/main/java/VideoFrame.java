@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class VideoFrame {
@@ -23,34 +24,45 @@ public class VideoFrame {
         int norm_w = 1/origin_w;
         int origin_h = height/2;
         int norm_h = 1/origin_h;
-        List norm_coord_h;
-        List norm_coord_w;
+        int[] norm_coord_h = new int[height];
+        int[] norm_coord_w = new int[width];
         for (int i = 0; i < width; i++) {
-            norm_coord_w.add(-1 + norm_w * i);
+            norm_coord_w[i] = (-1 + norm_w * i);
             }
-        for (int i = 0; i < width; i++) {
-            norm_coord_h.add(-1 + norm_h * i);
+        for (int i = 0; i < height; i++) {
+            norm_coord_h[i] = (-1 + norm_h * i);
         }
 
 
 
         for (Object i:norm_coord_h){
             for (Object j:norm_coord_w){
-                int distance = (Integer.parseInt(j) - toAttach.origin) ** 2 + (i - toAttach.origin[1]) ** 2
+                double distance = Math.pow((int) j - (int) toAttach.origin.get(0), 2) + Math.pow((int) i - (int) toAttach.origin.get(1), 2);
+                distance = Math.sqrt(distance);
+                if (distance < toAttach.radius){
+                    canvas[height - Arrays.asList(norm_coord_h).indexOf(i) - 1][Arrays.asList(norm_coord_w).indexOf(j)] = toAttach.color;
+                }
             }
         }
-        # distance = (j - toAttach.origin[0])**2 + (i - toAttach.origin[1])**2 + (0 - toAttach.origin[2])**2
-        distance = (j - toAttach.origin[0]) ** 2 + (i - toAttach.origin[1]) ** 2
-        distance = round(math.sqrt(distance), 5)
-        if distance < toAttach.radius:
-        z = -(j - toAttach.origin[0]) ** 2 - (i - toAttach.origin[1]) ** 2 + toAttach.radius ** 2
-        z = math.sqrt(z) + toAttach.origin[2]
-        if self.z_Buffer[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] == "":
-        self.z_Buffer[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] = z
-        self.array[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] = toAttach.color
-        elif self.z_Buffer[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] < z:
-        self.z_Buffer[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] = z
-        self.array[self.height - norm_coord_h.index(i) - 1][norm_coord_w.index(j)] = toAttach.color
+    }
+
+    public String render(){
+        String output = "";
+        String line = "";
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == 0) {
+                    line = line + canvas[i][j];
+                }
+                else{
+                    line = line + " " + canvas[i][j];
+                }
+
+            }
+            output += line + "\n";
+            line = "";
+        }
+        return output;
     }
 
 

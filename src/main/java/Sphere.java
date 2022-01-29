@@ -1,11 +1,13 @@
+import java.util.List;
+
 public class Sphere {
-    int origin;
-    int radius;
+    List origin;
+    double radius;
     String color;
 
-    public Sphere(int org, int r, String c) {
-        int origin = org;
-        int radius = r;
+    public Sphere(List org, double r, String c) {
+        origin = org;
+        radius = r;
         String color = c;
     }
 }
