@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,27 +21,29 @@ public class VideoFrame {
     }
 
     public void attach(Sphere toAttach){
-        int origin_w = width/2;
-        int norm_w = 1/origin_w;
-        int origin_h = height/2;
-        int norm_h = 1/origin_h;
-        int[] norm_coord_h = new int[height];
-        int[] norm_coord_w = new int[width];
+        double origin_w = width/2;
+        double norm_w = 1/origin_w;
+        double origin_h = height/2;
+        double norm_h = 1/origin_h;
+        List norm_coord_h = new ArrayList();
+        List norm_coord_w = new ArrayList();
         for (int i = 0; i < width; i++) {
-            norm_coord_w[i] = (-1 + norm_w * i);
+            norm_coord_w.add((-1 + norm_w * i) * 1.0);
             }
         for (int i = 0; i < height; i++) {
-            norm_coord_h[i] = (-1 + norm_h * i);
+            norm_coord_h.add((-1 + norm_h * i) * 1.0);
         }
 
 
 
         for (Object i:norm_coord_h){
             for (Object j:norm_coord_w){
-                double distance = Math.pow((int) j - (int) toAttach.origin.get(0), 2) + Math.pow((int) i - (int) toAttach.origin.get(1), 2);
-                distance = Math.sqrt(distance);
+                //System.out.println(i + ", " + j + ", "  + toAttach.origin.get(0) + ", " + toAttach.origin.get(1));
+                double distance = Math.pow((double) j - (double) toAttach.origin.get(0), 2) + Math.pow((double) i - (double) toAttach.origin.get(1), 2);
+                distance = Math.round(Math.sqrt(distance) * 100000d) / 100000d; // Rounding the number to 5 digits.
+                //System.out.println(distance);
                 if (distance < toAttach.radius){
-                    canvas[height - Arrays.asList(norm_coord_h).indexOf(i) - 1][Arrays.asList(norm_coord_w).indexOf(j)] = toAttach.color;
+                    canvas[height - norm_coord_h.indexOf(i) - 1][norm_coord_w.indexOf(j)] = toAttach.color;
                 }
             }
         }

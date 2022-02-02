@@ -8,6 +8,6 @@ public class Sphere {
     public Sphere(List org, double r, String c) {
         origin = org;
         radius = r;
-        String color = c;
+        color = c;
     }
 }
