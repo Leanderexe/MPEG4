@@ -9,7 +9,7 @@ public class Picture {
         for (int i = 0; i < 10; i++) {
             double random = new Random().nextDouble();
             double random2 = new Random().nextDouble();
-            VideoFrame c = new VideoFrame(31, 31, "+");
+            VideoFrame c = new VideoFrame(32, 32, "+");
             List array = new ArrayList();
             array.add(random);
             array.add(random2);
@@ -18,7 +18,8 @@ public class Picture {
             c.attach(l);
             //System.out.print(Color.BLUE_BOLD);
             Window win = new Window();
-            win.build_window(c.render());
+            win.build_blocks(8, 32, c.get_Canvas());
+            //win.build_window(c.render());
             //System.out.println(c.render());
 
 
