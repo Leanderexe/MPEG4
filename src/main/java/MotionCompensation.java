@@ -48,4 +48,29 @@ public class MotionCompensation {
         return compensation;
 
     }
+
+    public Integer[][] direction_vector(List comp){
+        Integer[][] vector = new Integer[comp.size()][2];
+        for(int i = 0; i < comp.size(); i++){
+            if (comp.get(i).equals("-1")){
+                Integer[] novec = {-1337, -1337};
+                vector[i] = novec;
+            }
+            else{
+                int x_new = i % 4; // Formel zur Berechnung der Position des nten-Blocks:  n : 4 = y Rest x
+                int y_new = i / 4;
+                //System.out.println(x_new + ", " + y_new);
+
+                int x_old = Integer.parseInt((String) comp.get(i)) % 4; // Formel zur Berechnung der Position des nten-Blocks: n : 4 = y Rest x
+                int y_old = Integer.parseInt((String) comp.get(i)) / 4;
+
+                //System.out.println(x_old + ", " + y_old);
+
+                Integer[] vec = {x_new - x_old, y_new - y_old};
+                vector[i] = vec;
+            }
+        }
+        return vector;
+    }
+
 }

@@ -13,7 +13,9 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Picture pic = new Picture();
-        pic.build();
+        //Picture pic = new Picture();
+        //pic.build();
+        Window win = new Window();
+        win.load_picture();
     }
 }
