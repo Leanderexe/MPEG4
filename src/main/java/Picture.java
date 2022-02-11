@@ -36,6 +36,16 @@ public class Picture {
             c.attach(l2);
             Canvas.add(c.get_Canvas());
             //System.out.print(Color.BLUE_BOLD);
+            Window win = new Window();
+            if (i%2 == 0){
+                win.build_blocks(8, 32, c.get_Canvas(), "Intra", false, null, 0);
+            }
+            else{
+                win.build_blocks(8, 32, c.get_Canvas(), "Intra", false, null, 1300);
+            }
+            TimeUnit.SECONDS.sleep(5);
+            //win.build_window(c.render());
+            System.out.println(c.render());
             if (i > 0){
                 String[] bmc = call_bmc();
                 for (int k = 0; k < bmc.length; k++){
@@ -44,16 +54,16 @@ public class Picture {
                     else{
                         String[] block = {bmc[k], Integer.toString(k)};  // Old Block, new Block.
                         Window win2 = new Window();
-                        win2.build_blocks(8, 32, (String[][]) Canvas.get(0), "Predictive", true, block);
+                        win2.build_blocks(8, 32, (String[][]) Canvas.get(0), "Intra", true, block, 0);
+                        //TimeUnit.SECONDS.sleep(1);
+                        Window win3 = new Window();
+                        win3.build_blocks(8, 32, (String[][]) Canvas.get(1), "Predictive", true, block, 1300);
                         TimeUnit.SECONDS.sleep(5);
                     }
                 }
 
             }
-            Window win = new Window();
-            win.build_blocks(8, 32, c.get_Canvas(), "Intra", false, null);
-            //win.build_window(c.render());
-            System.out.println(c.render());
+
             //Scanner in = new Scanner(System.in);
             //String str = in.nextLine();
             /*

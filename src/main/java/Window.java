@@ -41,7 +41,7 @@ public class Window {
         window.add(area, BorderLayout.SOUTH);
     }
 
-    public void build_blocks(int blocksize, int canvassize, String[][] canvas, String frametype, boolean BMC, String[] dir_vector){
+    public void build_blocks(int blocksize, int canvassize, String[][] canvas, String frametype, boolean BMC, String[] dir_vector, int location){
         String[][] Blocks = new String[canvassize][canvassize];
         for (int i = 0; i < 4; i++) {
             for (int p = 0; p < 4; p++) {
@@ -69,18 +69,18 @@ public class Window {
         System.out.println(canvas.toString());
         System.out.println(Blocks);
         if (BMC){
-            block_motion_comp(Blocks, frametype, dir_vector);
+            block_motion_comp(Blocks, frametype, dir_vector, location);
         }
         else{
-            set_blocks(Blocks, frametype);
+            set_blocks(Blocks, frametype, location);
         }
     }
 
-    public void set_blocks(String[][] blocks, String frametype){
+    public void set_blocks(String[][] blocks, String frametype, int location){
         //JFrame window = new JFrame();
         window.setTitle("MPEG4(" + frametype + " Frame)");
         window.setSize(1250, 1250);
-        window.setLocation(800, 100);
+        window.setLocation(location, 100);
         window.setVisible(true);
         Border border = BorderFactory.createLineBorder(Color.BLACK);
 
@@ -158,7 +158,7 @@ public class Window {
         }
     }
 
-    public void block_motion_comp(String[][] blocks, String frametype, String[] bmc) {
+    public void block_motion_comp(String[][] blocks, String frametype, String[] bmc, int location) {
         //JFrame window = new JFrame();
         //LayoutManager overlay = new OverlayLayout(window);
         //window.setLayout(overlay);
@@ -206,15 +206,13 @@ public class Window {
         JTextArea b16=new JTextArea();
         build_pixel(blocks, b16, 15);
 
-        String old_block = "b" + (Integer.parseInt(bmc[0]) + 1);
-        String new_block = "b" + (Integer.parseInt(bmc[1]) + 1);
-        System.out.println("old_block " + old_block + "   " + new_block);
+        //System.out.println("old_block " + old_block + "   " + new_block);
 
 
         int counter = 0;
         for (JTextArea jTextArea : Arrays.asList(b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16)) {
             jTextArea.setBorder(border);
-            System.out.println( counter + "  " + old_block + "   " + new_block);
+            //System.out.println( counter + "  " + old_block + "   " + new_block);
 
             if (counter == Integer.parseInt(bmc[1])){
                 jTextArea.setBackground(Color.GREEN);
@@ -270,31 +268,38 @@ public class Window {
         graphig.setOpaque(false);
         lpane.add(graphig, new Integer(1), 0); // Layer direction vector over the Canvas.
         window.setSize(1250, 1250);
-        window.setLocation(800, 100);
+        window.setLocation(location, 100);
         //window.add(canvaspanel);
         //lpane.setBounds(0, 0, 1250, 1250);
         //Graphics2D graphic = new Graphics2D();
     }
 
     class Grap extends JPanel implements ActionListener {
-        int x_new;
-        int y_new;
+        float x_new;
+        int x_new_end;
+        int y_new_end;
+        float y_new;
         int x_old;
         int y_old;
-        int vx = 1;
-        int vy = 1;
+        float vx;
+        float vy;
         Timer timer;
+        int counter = 0;
 
         Grap(Integer[] old_coord, Integer[] new_coord, int mid_point){
-            x_new = new_coord[0] + mid_point;
-            y_new = new_coord[1] + mid_point;
+            x_new_end = new_coord[0] + mid_point;
+            x_new = old_coord[0] + mid_point;
+            y_new_end = new_coord[1] + mid_point;
+            y_new = old_coord[1] + mid_point;
             x_old = old_coord[0] + mid_point;
             y_old = old_coord[1] + mid_point;
-            int i = 0;
+            vx = (new_coord[0] + mid_point - x_old) / 100;
+            vy = (new_coord[1] + mid_point - y_old) / 100;
             this.setSize(1250, 1250);
             this.setLocation(0, 0);
             this.setVisible(true);
-            timer = new Timer(100,null);
+            timer = new Timer(10,this);
+            timer.start();
 
         }
 
@@ -311,28 +316,34 @@ public class Window {
             g2.setPaint(Color.GREEN);
 
             // Source: https://itqna.net/questions/3389/how-draw-arrow-using-java2d
+            if (x_new == x_old & y_new == y_old) { // The new block and old block are exactly the same so no arrow will be drawn.
+            }
+            else{
+                Polygon arrowHead = new Polygon();
+                AffineTransform tx = new AffineTransform();
+                arrowHead.addPoint(0, 5);
+                arrowHead.addPoint(-10, -10);
+                arrowHead.addPoint(10, -10);
 
-            Polygon arrowHead = new Polygon();
-            AffineTransform tx = new AffineTransform();
-            arrowHead.addPoint(0, 5);
-            arrowHead.addPoint(-10, -10);
-            arrowHead.addPoint(10, -10);
+                tx.setToIdentity();
+                double angle = Math.atan2(y_new - y_old, x_new - x_old);
+                tx.translate(x_new, y_new);
+                tx.rotate(angle - Math.PI / 2d);
 
-            tx.setToIdentity();
-            double angle = Math.atan2(y_new - y_old, x_new - x_old);
-            tx.translate(x_new, y_new);
-            tx.rotate(angle - Math.PI / 2d);
-
-            g2.setTransform(tx);
-            g2.fill(arrowHead);
+                g2.setTransform(tx);
+                g2.fill(arrowHead);
+            }
 
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            x_new = x_new + vx;
-            y_new = y_new + vy;
-            repaint();
+            if (counter < 101){
+                counter += 1;
+                x_new = x_new + vx;
+                y_new = y_new + vy;
+                repaint();
+            }
         }
     }
 
