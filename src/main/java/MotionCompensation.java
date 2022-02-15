@@ -5,31 +5,33 @@ public class MotionCompensation {
     int heigth;
     int width;
     int blocksize;
+    int number_of_blocks;
 
     public MotionCompensation(int w, int h,int blocksz){
         heigth = h;
         width = w;
         blocksize = blocksz;
+        number_of_blocks = heigth/blocksize;
     }
 
     public List build_blocks(String[][] canvas){
         List Blocks = new ArrayList();
-        for (int i = 0; i < 4; i++) {
-            for (int p = 0; p < 4; p++) {
+        for (int i = 0; i < number_of_blocks; i++) {
+            for (int p = 0; p < number_of_blocks; p++) {
                 String Block = "";
-                for (int j = 8 * i; j < 8 * i + blocksize; j++) {
-                    for (int n = 8 * p; n < 8 * p + blocksize; n++) {
+                for (int j = blocksize * i; j < blocksize * i + blocksize; j++) {
+                    for (int n = blocksize * p; n < blocksize * p + blocksize; n++) {
                         //System.out.println("hihihihgffffffffffffffffffff");
                         Block += canvas[j][n];
                     }
                     Block += "\n";
                 }
                 Blocks.add(Block);
-                System.out.println(Block);
+                //System.out.println(Block);
             }
         }
-        System.out.println(canvas.toString());
-        System.out.println(Blocks);
+        //System.out.println(canvas.toString());
+        //System.out.println(Blocks);
         //build_blocks(Blocks, frametype);
         return Blocks;
     }
@@ -57,12 +59,12 @@ public class MotionCompensation {
                 vector[i] = novec;
             }
             else{
-                int x_new = i % 4; // Formel zur Berechnung der Position des nten-Blocks:  n : 4 = y Rest x
-                int y_new = i / 4;
+                int x_new = i % number_of_blocks; // Formel zur Berechnung der Position des nten-Blocks:  n : 4 = y Rest x
+                int y_new = i / number_of_blocks;
                 //System.out.println(x_new + ", " + y_new);
 
-                int x_old = Integer.parseInt((String) comp.get(i)) % 4; // Formel zur Berechnung der Position des nten-Blocks: n : 4 = y Rest x
-                int y_old = Integer.parseInt((String) comp.get(i)) / 4;
+                int x_old = Integer.parseInt((String) comp.get(i)) % number_of_blocks; // Formel zur Berechnung der Position des nten-Blocks: n : 4 = y Rest x
+                int y_old = Integer.parseInt((String) comp.get(i)) / number_of_blocks;
 
                 //System.out.println(x_old + ", " + y_old);
 

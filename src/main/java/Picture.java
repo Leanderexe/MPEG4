@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -5,87 +6,186 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Picture {
-    int heigth = 32;
-    int width = 32;
-    int blocksize = 8;
     List Canvas = new ArrayList();
+
+    //###########################################
+    // Stelle die Auflösung ein (in Pixel).
+    int resolution = 64;
+    //###########################################
+
+    //###########################################
+    // Stelle die blocksize ein (in Pixel).
+    Integer[] blocksizelist = {8, 16, 32};
+    //###########################################
+
+    //###########################################
+    // Stelle die Anzahl an Frames ein.
+    int frames = 10;
+    //###########################################
+
+    //###########################################
+    // Stelle die Geschwindigkeit ein (in Sekunden).
+    int Geschwindigkeit = 1000;
+    //###########################################
+
+    //###########################################
+    // Stelle ein ob es eine Animation geben soll.
+    boolean animation = false;
+    //###########################################
 
     public void build() throws InterruptedException {
         // first Frame.
-        for (int i = 0; i < 2; i++) {
-            double random_int1 = new Random().nextInt(2) - 1; // Create a random integer number between -1 and 0.
-            double random_int2 = new Random().nextInt(2) - 1;
-            double random_int3 = new Random().nextInt(2) - 1;
-            double random_int4 = new Random().nextInt(2) - 1;
-            double random = new Random().nextDouble() + random_int1; // Creates a random number between -1 and 1.
-            double random2 = new Random().nextDouble() + random_int2;
-            double random3 = new Random().nextDouble() + random_int3;
-            double random4 = new Random().nextDouble() + random_int4;
-            VideoFrame c = new VideoFrame(32, 32, "+");
-            List array = new ArrayList();
-            array.add(random);
-            array.add(random2);
-            array.add(0.);
-            List array2 = new ArrayList();
-            array2.add(random3);
-            array2.add(random4);
-            array2.add(0.);
-            Sphere l = new Sphere(array, 0.5, "A");
-            Sphere l2 = new Sphere(array2, 0.7, "B");
-            c.attach(l);
-            c.attach(l2);
-            Canvas.add(c.get_Canvas());
-            //System.out.print(Color.BLUE_BOLD);
-            Window win = new Window();
-            if (i%2 == 0){
-                win.build_blocks(8, 32, c.get_Canvas(), "Intra", false, null, 0);
-            }
-            else{
-                win.build_blocks(8, 32, c.get_Canvas(), "Intra", false, null, 1300);
-            }
-            TimeUnit.SECONDS.sleep(5);
-            //win.build_window(c.render());
-            System.out.println(c.render());
-            if (i > 0){
-                String[] bmc = call_bmc();
-                for (int k = 0; k < bmc.length; k++){
-                    if (bmc[k].equals("-1")){
+        List comp_factor = new ArrayList();
+        for (int z = 0; z < blocksizelist.length; z++) {
+            Integer blocksize = blocksizelist[z];
+            comp_factor.clear();
+            for (int i = 0; i < frames; i++) {
+                double random_int1 = new Random().nextInt(2) - 1; // Create a random integer number between -1 and 0.
+                double random_int2 = new Random().nextInt(2) - 1;
+                double random_int3 = new Random().nextInt(2) - 1;
+                double random_int4 = new Random().nextInt(2) - 1;
+                double random = new Random().nextDouble() + random_int1; // Creates a random number between -1 and 1.
+                double random2 = new Random().nextDouble() + random_int2;
+                double random3 = new Random().nextDouble() + random_int3;
+                double random4 = new Random().nextDouble() + random_int4;
+                VideoFrame c = new VideoFrame(resolution, resolution, "+");
+                List array = new ArrayList();
+                array.add(random);
+                array.add(random2);
+                array.add(0.);
+                List array2 = new ArrayList();
+                array2.add(random3);
+                array2.add(random4);
+                array2.add(0.);
+                Sphere l = new Sphere(array, 0.5, "A");
+                Sphere l2 = new Sphere(array2, 0.7, "B");
+                c.attach(l);
+                c.attach(l2);
+                Canvas.add(c.get_Canvas());
+                //System.out.print(Color.BLUE_BOLD);
+                Window win = new Window(resolution, resolution, blocksize);
+                String frametype = i + 1 + ". ";
+                String frame = i + ". ";
+                if (i % 2 == 0) {
+                    win.build_blocks(blocksize, resolution, c.get_Canvas(), frametype, false, null, 0, false, false, null);
+                } else {
+                    win.build_blocks(blocksize, resolution, c.get_Canvas(), frametype, false, null, 1300, true, false, null);
+                }
+                TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
+                win.close_window();
+                //win.build_window(c.render());
+                //System.out.println(c.render());
+                if (i > 0) {
+                    String[] bmc = call_bmc(i, blocksize);
+                    if (animation) {
+                        Animation(bmc, i, blocksize);
+                    } else {
+                        if (bmc[bmc.length - 1].equals("-1")) {
+                            String[] block = {String.valueOf(bmc.length - 1), String.valueOf(bmc.length - 1)};  // Old Block, new Block.
+                            Window win2 = new Window(resolution, resolution, blocksize);
+                            win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), frame, true, block, 0, false, false, bmc);
+                            Window win3 = new Window(resolution, resolution, blocksize);
+                            win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, true, block, 1300, true, false, bmc);
+                            TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
+                            win2.close_window();
+                            win3.close_window();
+                        } else {
+                            String[] block = {bmc[bmc.length - 1], Integer.toString(bmc.length - 1)};  // Old Block, new Block.
+                            Window win2 = new Window(resolution, resolution, blocksize);
+                            win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), frame, true, block, 0, false, true, bmc);
+                            Window win3 = new Window(resolution, resolution, blocksize);
+                            win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, true, block, 1300, true, true, bmc);
+                            TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
+                            win2.close_window();
+                            win3.close_window();
+                        }
                     }
-                    else{
-                        String[] block = {bmc[k], Integer.toString(k)};  // Old Block, new Block.
-                        Window win2 = new Window();
-                        win2.build_blocks(8, 32, (String[][]) Canvas.get(0), "Intra", true, block, 0);
-                        //TimeUnit.SECONDS.sleep(1);
-                        Window win3 = new Window();
-                        win3.build_blocks(8, 32, (String[][]) Canvas.get(1), "Predictive", true, block, 1300);
-                        TimeUnit.SECONDS.sleep(5);
-                    }
+                    comp_factor.add(Hits(bmc));
+                    //System.out.println("Anzahl an durch Motion Compensation komprimierte Blöcke: " + Hits(bmc) + " von " + (width / blocksize) * (width / blocksize));
                 }
 
-            }
-
-            //Scanner in = new Scanner(System.in);
-            //String str = in.nextLine();
+                //Scanner in = new Scanner(System.in);
+                //String str = in.nextLine();
             /*
             for (int p = 0; p < Canvas.size(); p++){
                 VideoFrame vid = (VideoFrame) Canvas.get(p);
                 System.out.println("Hellopepe" + vid.render());
             } */
+            }
+            compression_factor(comp_factor, blocksize);
         }
     }
 
 
-    public String[] call_bmc(){
-        MotionCompensation comp = new MotionCompensation(width, heigth, blocksize);
-        List Blocks1 = comp.build_blocks((String[][]) Canvas.get(0));
-        List Blocks2 = comp.build_blocks((String[][]) Canvas.get(1));
+    public String[] call_bmc(int framenumber, int blocksize){
+        MotionCompensation comp = new MotionCompensation(resolution, resolution, blocksize);
+        List Blocks1 = comp.build_blocks((String[][]) Canvas.get(framenumber-1));
+        List Blocks2 = comp.build_blocks((String[][]) Canvas.get(framenumber));
         String[] compensation = comp.compare_blocks(Blocks1, Blocks2);
         Integer[][] vector = comp.direction_vector(Arrays.asList(compensation));
         for (int i = 0; i < vector.length; i++){
-            System.out.println(Arrays.toString(vector[i]));
+            //System.out.println(Arrays.toString(vector[i]));
         }
-        System.out.println("hihihihi" + Arrays.toString(comp.compare_blocks(Blocks1, Blocks2)));
+        //System.out.println("hihihihi" + Arrays.toString(comp.compare_blocks(Blocks1, Blocks2)));
         return compensation;
+    }
+
+    public int Hits(String[] comp){
+        int counter = 0;
+        for(int i = 0; i < comp.length; i++){
+            if (comp[i].equals("-1")){
+            }
+            else{
+                counter += 1;
+            }
+        }
+        return counter;
+    }
+
+    public void Animation(String[] bmc, int i, int blocksize) throws InterruptedException {
+        for (int k = 0; k < bmc.length; k++){
+            for (int j = 0; j < bmc.length; j++) {
+                if (bmc[k].equals(Integer.toString(j))) {
+                    String[] block = {bmc[k], Integer.toString(k)};  // Old Block, new Block.
+                    Window win2 = new Window(resolution, resolution, blocksize);
+                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), "Intra", true, block, 0, false, true, bmc);
+                    //TimeUnit.SECONDS.sleep(1);
+                    Window win3 = new Window(resolution, resolution, blocksize);
+                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), "Predictive", true, block, 1300, true, true, bmc);
+                    TimeUnit.MILLISECONDS.sleep(Geschwindigkeit * 3);
+                    win2.close_window();
+                    win3.close_window();
+                    break;
+                } else {
+                    String[] block = {String.valueOf(j), String.valueOf(k)};  // Old Block, new Block.
+                    Window win2 = new Window(resolution, resolution, blocksize);
+                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), "Intra", true, block, 0, false, false, bmc);
+                    //TimeUnit.SECONDS.sleep(1);
+                    Window win3 = new Window(resolution, resolution, blocksize);
+                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), "Predictive", true, block, 1300, true, false, bmc);
+                    TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
+                    win2.close_window();
+                    win3.close_window();
+                }
+            }
+        }
+    }
+
+    public Integer compression_factor(List comp_factor, int blocksize){
+        int block_hits = 0;
+        for (int i = 0; i < comp_factor.size(); i++){
+            block_hits += (Integer)comp_factor.get(i);
+        }
+        //win.build_blocks(blocksize, 32, c.get_Canvas(), "Intra", false, null, 0, false, false, null);
+        System.out.println("###################################### Blockgröße: " + blocksize + " ######################################");
+        System.out.println("Anzahl an durch Motion Compensation komprimierte Blöcken: " + block_hits + " von " + (resolution/blocksize)*(resolution/blocksize)*frames + " Blöcken");
+        if (block_hits == 0){
+            System.out.println("Kompremierungsfaktor: " +  0);
+        }
+        System.out.println("Kompremierungsfaktor: " +  (double)block_hits/((resolution/blocksize)*(resolution/blocksize)*frames));
+        System.out.println("############################################################################################");
+        System.out.println();
+        return block_hits;
     }
 
 }
