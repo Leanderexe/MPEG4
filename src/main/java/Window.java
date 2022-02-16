@@ -31,6 +31,17 @@ public class Window {
     JTextArea b49=new JTextArea();JTextArea b50=new JTextArea();JTextArea b51=new JTextArea();JTextArea b52=new JTextArea();JTextArea b53=new JTextArea();JTextArea b54=new JTextArea();
     JTextArea b55=new JTextArea();JTextArea b56=new JTextArea();JTextArea b57=new JTextArea();JTextArea b58=new JTextArea();JTextArea b59=new JTextArea();JTextArea b60=new JTextArea();
     JTextArea b61=new JTextArea();JTextArea b62=new JTextArea();JTextArea b63=new JTextArea();JTextArea b64=new JTextArea();
+    JTextArea b65= new JTextArea();JTextArea b66=new JTextArea();JTextArea b67=new JTextArea();JTextArea b68=new JTextArea();JTextArea b69=new JTextArea();JTextArea b70=new JTextArea();
+    JTextArea b71=new JTextArea();JTextArea b72=new JTextArea();JTextArea b73=new JTextArea();JTextArea b74=new JTextArea();JTextArea b75=new JTextArea();JTextArea b76=new JTextArea();
+    JTextArea b77=new JTextArea();JTextArea b78=new JTextArea();JTextArea b79=new JTextArea();JTextArea b80=new JTextArea();JTextArea b81=new JTextArea();JTextArea b82=new JTextArea();
+    JTextArea b83=new JTextArea();JTextArea b84=new JTextArea();JTextArea b85=new JTextArea();JTextArea b86=new JTextArea();JTextArea b87=new JTextArea();JTextArea b88=new JTextArea();
+    JTextArea b89=new JTextArea();JTextArea b90=new JTextArea();JTextArea b91=new JTextArea();JTextArea b92=new JTextArea();JTextArea b93=new JTextArea();JTextArea b94=new JTextArea();
+    JTextArea b95=new JTextArea();JTextArea b96=new JTextArea();JTextArea b97=new JTextArea();JTextArea b98=new JTextArea();JTextArea b99=new JTextArea();JTextArea b100=new JTextArea();
+    JTextArea b101=new JTextArea();JTextArea b102=new JTextArea();JTextArea b103=new JTextArea();JTextArea b104=new JTextArea();JTextArea b105=new JTextArea();JTextArea b106=new JTextArea();
+    JTextArea b107=new JTextArea();JTextArea b108=new JTextArea();JTextArea b109=new JTextArea();JTextArea b110=new JTextArea();JTextArea b111=new JTextArea();JTextArea b112=new JTextArea();
+    JTextArea b113=new JTextArea();JTextArea b114=new JTextArea();JTextArea b115=new JTextArea();JTextArea b116=new JTextArea();JTextArea b117=new JTextArea();JTextArea b118=new JTextArea();
+    JTextArea b119=new JTextArea();JTextArea b120=new JTextArea();JTextArea b121=new JTextArea();JTextArea b122=new JTextArea();JTextArea b123=new JTextArea();JTextArea b124=new JTextArea();
+    JTextArea b125=new JTextArea();JTextArea b126=new JTextArea();JTextArea b127=new JTextArea();JTextArea b128=new JTextArea();
     List Components = new ArrayList();
 
 
@@ -41,7 +52,9 @@ public class Window {
         number_of_blocks = heigth/blocksize;
         blocks_per_frame = number_of_blocks*number_of_blocks;
         Collections.addAll(Components,b1 ,b2 ,b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40,
-                b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54, b55, b56, b57, b58, b59, b60, b61, b62, b63, b64);
+                b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54, b55, b56, b57, b58, b59, b60, b61, b62, b63, b64, b65, b66, b67, b68, b69, b70, b71, b72, b73, b74, b75, b76, b77, b78, b79, b80, b81, b82, b83,
+                b84, b85, b86, b87, b88, b89, b90, b91, b92, b93, b94, b95, b96, b97, b98, b99, b100, b101, b102, b103, b104, b105, b106, b107, b108, b109, b110, b111, b112, b113, b114, b115, b116, b117, b118, b119, b120, b121, b122, b123, b124, b125,
+                b126, b127, b128);
     }
 
 
@@ -70,7 +83,7 @@ public class Window {
         window.add(area, BorderLayout.SOUTH);
     }
 
-    public void build_blocks(int blocksize, int canvassize, String[][] canvas, String frametype, boolean BMC, String[] dir_vector, int location, boolean second_frame, boolean compress, String[] bmc_blocks){
+    public void build_blocks(int blocksize, int canvassize, String[][] canvas, String frametype, boolean BMC, String[] dir_vector, int location, boolean second_frame, boolean compress, String[] bmc_blocks, int animation){
         String[][] Blocks = new String[canvassize][canvassize];
         for (int i = 0; i < number_of_blocks; i++) {
             for (int p = 0; p < number_of_blocks; p++) {
@@ -98,7 +111,7 @@ public class Window {
         //System.out.println(canvas.toString());
         //System.out.println(Blocks);
         if (BMC){
-            block_motion_comp(Blocks, frametype, dir_vector, location, second_frame, compress, bmc_blocks);
+            block_motion_comp(Blocks, frametype, dir_vector, location, second_frame, compress, bmc_blocks, animation);
         }
         else{
             set_blocks(Blocks, frametype, location);
@@ -156,7 +169,7 @@ public class Window {
         }
     }
 
-    public void block_motion_comp(String[][] blocks, String frametype, String[] bmc, int location, boolean second_frame, boolean compress, String[] bmc_blocks) {
+    public void block_motion_comp(String[][] blocks, String frametype, String[] bmc, int location, boolean second_frame, boolean compress, String[] bmc_blocks, int animation) {
         //JFrame window = new JFrame();
         //LayoutManager overlay = new OverlayLayout(window);
         //window.setLayout(overlay);
@@ -189,17 +202,23 @@ public class Window {
             if (counter == Integer.parseInt(bmc[1])){
                 if (second_frame == true){
                     if (compress){
-                        jTextArea.setBackground(Color.GREEN);
-                        jTextArea.setBorder(border_right);
-                    }
+                            jTextArea.setBackground(Color.GREEN);
+                            jTextArea.setBorder(border_right);
+                        }
                     else {
-                        jTextArea.setBackground(Color.GREEN);
-                        jTextArea.setBorder(border_new);
+                        if (animation == 0){
+                            jTextArea.setBackground(Color.RED);
+                            jTextArea.setBorder(border_old);
+                        }
+                        else {
+                            jTextArea.setBackground(Color.WHITE);
+                            jTextArea.setBorder(border_new);
+                        }
                     }
                 }
                 else if (counter == Integer.parseInt(bmc[0])){
-                    jTextArea.setBackground(Color.RED);
-                    jTextArea.setBorder(border_old);
+                    jTextArea.setBackground(Color.GREEN);
+                    jTextArea.setBorder(border_right);
                 }
                 else{
                     jTextArea.setBackground(Color.BLACK);
@@ -281,31 +300,51 @@ public class Window {
         }
         */
 
-        if(compress) {
+
+        if (animation == 0) {
+            for (int i = 0; i < bmc_blocks.length; i++) {
+                if (bmc_blocks[i].equals("-1")) {
+                } else {
+                    String[] block = {bmc_blocks[i], Integer.toString(i)};  // Old Block, new Block.
+                    Integer[] new_coord = {canvaspanel.getComponent(Integer.parseInt(block[1])).getX(), canvaspanel.getComponent(Integer.parseInt(block[1])).getY()};
+                    Integer[] old_coord = {canvaspanel.getComponent(Integer.parseInt(block[0])).getX(), canvaspanel.getComponent(Integer.parseInt(block[0])).getY()};
+                    int middle_point = (canvaspanel.getComponent(1).getX() - canvaspanel.getComponent(0).getX()) / 2;
+
+                    Grap graphig = new Grap(old_coord, new_coord, middle_point, false);
+                    graphig.setVisible(true);
+                    graphig.setOpaque(false);
+                    lpane.add(graphig, new Integer(1), 0); // Layer direction vector over the Canvas.
+                }
+            }
+        }
+        else {
+            if (compress){
             Integer[] new_coord = {canvaspanel.getComponent(Integer.parseInt(bmc[1])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[1])).getY()};
             Integer[] old_coord = {canvaspanel.getComponent(Integer.parseInt(bmc[0])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[0])).getY()};
             int middle_point = (canvaspanel.getComponent(1).getX() - canvaspanel.getComponent(0).getX()) / 2;
 
-            Grap graphig = new Grap(old_coord, new_coord, middle_point);
+            Grap graphig = new Grap(old_coord, new_coord, middle_point, true);
             graphig.setVisible(true);
             graphig.setOpaque(false);
             lpane.add(graphig, new Integer(1), 0); // Layer direction vector over the Canvas.
-        }
-        else{
-            Integer[] coord = null;
-            if (second_frame){
-                coord = new Integer[]{canvaspanel.getComponent(Integer.parseInt(bmc[1])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[1])).getY()};
-            }
+                }
             else{
-                coord = new Integer[]{canvaspanel.getComponent(Integer.parseInt(bmc[0])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[0])).getY()};
-            }
-            int size = canvaspanel.getComponent(1).getX(); // The size of one block.
+                Integer[] coord = null;
+                if (second_frame){
+                    coord = new Integer[]{canvaspanel.getComponent(Integer.parseInt(bmc[1])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[1])).getY()};
+                }
+                else{
+                    coord = new Integer[]{canvaspanel.getComponent(Integer.parseInt(bmc[0])).getX(), canvaspanel.getComponent(Integer.parseInt(bmc[0])).getY()};
+                }
+                int size = canvaspanel.getComponent(1).getX(); // The size of one block.
 
-            Cross graphig = new Cross(coord, size);
-            graphig.setVisible(true);
-            graphig.setOpaque(false);
-            lpane.add(graphig, new Integer(1), 0); // Layer direction vector over the Canvas.
+                Cross graphig = new Cross(coord, size);
+                graphig.setVisible(true);
+                graphig.setOpaque(false);
+                lpane.add(graphig, new Integer(1), 0); // Layer direction vector over the Canvas.
+            }
         }
+
         window.setSize(1250, 1270);
         window.setLocation(location, 100);
         //window.add(canvaspanel);
@@ -324,21 +363,31 @@ public class Window {
         float vy;
         Timer timer;
         int counter = 0;
+        boolean animation;
 
-        Grap(Integer[] old_coord, Integer[] new_coord, int mid_point){
-            x_new_end = new_coord[0] + mid_point;
-            x_new = old_coord[0] + mid_point;
-            y_new_end = new_coord[1] + mid_point;
-            y_new = old_coord[1] + mid_point;
-            x_old = old_coord[0] + mid_point;
-            y_old = old_coord[1] + mid_point;
-            vx = (new_coord[0] + mid_point - x_old) / 100;
-            vy = (new_coord[1] + mid_point - y_old) / 100;
+
+        Grap(Integer[] old_coord, Integer[] new_coord, int mid_point, boolean animation){
+            if (animation){
+                x_new_end = new_coord[0] + mid_point;
+                x_new = old_coord[0] + mid_point;
+                y_new_end = new_coord[1] + mid_point;
+                y_new = old_coord[1] + mid_point;
+                x_old = old_coord[0] + mid_point;
+                y_old = old_coord[1] + mid_point;
+                vx = (new_coord[0] + mid_point - x_old) / 100;
+                vy = (new_coord[1] + mid_point - y_old) / 100;
+                timer = new Timer(10,this);
+                timer.start();
+            }
+            else{
+                y_new = new_coord[1] + mid_point;
+                x_old = old_coord[0] + mid_point;
+                y_old = old_coord[1] + mid_point;
+                x_new = new_coord[0] + mid_point;
+            }
             this.setSize(1250, 1250);
             this.setLocation(0, 0);
             this.setVisible(true);
-            timer = new Timer(10,this);
-            timer.start();
 
         }
 
