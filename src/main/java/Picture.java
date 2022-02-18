@@ -11,36 +11,36 @@ public class Picture {
     StopWatch stopWatch = new StopWatch();
     List Canvas = new ArrayList();
 
-    //###########################################
-    // Stelle die Auflösung ein (in Pixel), Resolution * Resolution = #Pixel.
-    int resolution = 64; // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
+    //##########################################################################
+    // Stellen Sie die Auflösung ein (in Pixel), Resolution * Resolution = #Pixel.
+    int resolution = 32; // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
     //int resolution = 32; //Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
     //int resolution = 256; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
-    //###########################################
+    //##########################################################################
 
-    //###########################################
-    // Stelle die blocksize ein (in Pixel).
-    Integer[] blocksizelist = {8};  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
+    //##########################################################################
+    // Stelle Sie die blocksize ein (in Pixel). Es können mehrere Blocksizes in die Liste eingetragen werden.
+    Integer[] blocksizelist = {8, 16, 32};  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
     //Integer[] blocksizelist = {8, 16}; // Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
-    //Integer[] blocksizelist = {2, 4, 8, 16, 32, 64}; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
-    //###########################################
+    //Integer[] blocksizelist = {2, 4, 8, 16, 32, 64, 128}; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
+    //##########################################################################
 
-    //###########################################
-    // Stelle die Anzahl an Frames ein.
+    //##########################################################################
+    // Stelle Sie die Anzahl an Frames ein, die die Videosequenz haben soll.
     int frames = 10;
-    //###########################################
+    //##########################################################################
 
-    //###########################################
-    // Stelle die Geschwindigkeit ein (in Millisekunden).
-    int Geschwindigkeit = 2000;
-    //###########################################
+    //##########################################################################
+    // Stelle Sie die Geschwindigkeit der Animationselemente ein (in Millisekunden).
+    int Geschwindigkeit = 10000;
+    //##########################################################################
 
-    //###########################################
-    // Stelle ein ob es eine Animation geben soll. 0 = keine Animation, 1 = nur Richtungsvektoren anzeigen, 2 = Schritt für Schritt Animation des BMC.
+    //##########################################################################
+    // Stelle Sie ein, ob es eine Animation geben soll. 0 = keine Animation, 1 = nur Richtungsvektoren anzeigen, 2 = Schritt für Schritt Animation des BMC.
     int animation = 2; // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
     //int animation = 1; // Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
-    //int animation = 0; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
-    //###########################################
+    //int animation = 0; // Beispiel Animation = 0, zeigt Kompressionsfaktoren im Vergleich zur Berechnungsdauer.
+    //##########################################################################
 
     public void build() throws InterruptedException {
         // first Frame.
@@ -64,18 +64,8 @@ public class Picture {
                     }
 
                 } else {
-                    Window win = new Window(resolution, resolution, blocksize);
                     String frametype = i + 1 + ". ";
                     String frame = i + ". ";
-                    if (i % 2 == 0) {
-                        win.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, false, null, 0, false, false, null, 1);
-                    } else {
-                        win.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, false, null, 1300, true, false, null, 1);
-                    }
-                    TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
-                    win.close_window();
-                    //win.build_window(c.render());
-                    //System.out.println(c.render());
                     if (i > 0) {
                         String[] bmc = call_bmc(i, blocksize);
                         if (animation == 2) {
@@ -102,16 +92,9 @@ public class Picture {
                             }
                         }
                         comp_factor.add(Hits(bmc));
-                        //System.out.println("Anzahl an durch Motion Compensation komprimierte Blöcke: " + Hits(bmc) + " von " + (width / blocksize) * (width / blocksize));
+
                     }
 
-                    //Scanner in = new Scanner(System.in);
-                    //String str = in.nextLine();
-            /*
-            for (int p = 0; p < Canvas.size(); p++){
-                VideoFrame vid = (VideoFrame) Canvas.get(p);
-                System.out.println("Hellopepe" + vid.render());
-            } */
                 }
             }
             compression_factor(comp_factor, blocksize);
@@ -128,7 +111,6 @@ public class Picture {
         for (int i = 0; i < vector.length; i++){
             //System.out.println(Arrays.toString(vector[i]));
         }
-        //System.out.println("hihihihi" + Arrays.toString(comp.compare_blocks(Blocks1, Blocks2)));
         return compensation;
     }
 
@@ -145,15 +127,16 @@ public class Picture {
     }
 
     public void Animation(String[] bmc, int i, int blocksize) throws InterruptedException {
+        String frametype = i + 1 + ". ";
+        String frame = i + ". ";
         for (int k = 0; k < bmc.length; k++){
             for (int j = 0; j < bmc.length; j++) {
                 if (bmc[k].equals(Integer.toString(j))) {
                     String[] block = {bmc[k], Integer.toString(k)};  // Old Block, new Block.
                     Window win2 = new Window(resolution, resolution, blocksize);
-                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), "Intra", true, block, 0, false, true, bmc, 1);
-                    //TimeUnit.SECONDS.sleep(1);
+                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), frame, true, block, 0, false, true, bmc, 1);
                     Window win3 = new Window(resolution, resolution, blocksize);
-                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), "Predictive", true, block, 1300, true, true, bmc, 1);
+                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, true, block, 1300, true, true, bmc, 1);
                     TimeUnit.MILLISECONDS.sleep(Geschwindigkeit * 3);
                     win2.close_window();
                     win3.close_window();
@@ -161,10 +144,9 @@ public class Picture {
                 } else {
                     String[] block = {String.valueOf(j), String.valueOf(k)};  // Old Block, new Block.
                     Window win2 = new Window(resolution, resolution, blocksize);
-                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), "Intra", true, block, 0, false, false, bmc, 1);
-                    //TimeUnit.SECONDS.sleep(1);
+                    win2.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i - 1), frame, true, block, 0, false, false, bmc, 1);
                     Window win3 = new Window(resolution, resolution, blocksize);
-                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), "Predictive", true, block, 1300, true, false, bmc, 1);
+                    win3.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, true, block, 1300, true, false, bmc, 1);
                     TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
                     win2.close_window();
                     win3.close_window();
@@ -186,7 +168,7 @@ public class Picture {
         }
         System.out.println("Kompressionsfaktor: " +  (double)block_hits/((resolution/blocksize)*(resolution/blocksize)*frames));
         if (animation == 0){
-            System.out.println("Die Komression hat "+ stopWatch.getTime(TimeUnit.MINUTES) + "m " + stopWatch.getTime(TimeUnit.SECONDS) + "s " +  stopWatch.getTime(TimeUnit.MILLISECONDS) + "ms gedauert.");
+            System.out.println("Die Kompression hat "+ stopWatch.getTime(TimeUnit.MINUTES) + "m " + stopWatch.getTime(TimeUnit.SECONDS) + "s " +  stopWatch.getTime(TimeUnit.MILLISECONDS) + "ms gedauert.");
 
         }
         System.out.println("############################################################################################");
@@ -221,4 +203,17 @@ public class Picture {
         }
     }
 
+
+    public void print_frames(int i, int blocksize) throws InterruptedException {
+        Window win = new Window(resolution, resolution, blocksize);
+        String frametype = i + 1 + ". ";
+        String frame = i + ". ";
+        if (i % 2 == 0) {
+            win.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, false, null, 0, false, false, null, 1);
+        } else {
+            win.build_blocks(blocksize, resolution, (String[][]) Canvas.get(i), frametype, false, null, 1300, true, false, null, 1);
+        }
+        TimeUnit.MILLISECONDS.sleep(Geschwindigkeit);
+        win.close_window();
+    }
 }

@@ -170,12 +170,7 @@ public class Window {
     }
 
     public void block_motion_comp(String[][] blocks, String frametype, String[] bmc, int location, boolean second_frame, boolean compress, String[] bmc_blocks, int animation) {
-        //JFrame window = new JFrame();
-        //LayoutManager overlay = new OverlayLayout(window);
-        //window.setLayout(overlay);
-        window.setTitle("MPEG4(" + frametype + " Frame)");
-        //window.setSize(1250, 1250);
-        //window.setLocation(800, 100);
+        window.setTitle(frametype + " Frame");
         window.setVisible(true);
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         Border border_old = BorderFactory.createLineBorder(Color.RED);
@@ -217,8 +212,14 @@ public class Window {
                     }
                 }
                 else if (counter == Integer.parseInt(bmc[0])){
-                    jTextArea.setBackground(Color.GREEN);
-                    jTextArea.setBorder(border_right);
+                    if (compress){
+                        jTextArea.setBackground(Color.GREEN);
+                        jTextArea.setBorder(border_right);
+                    }
+                    else {
+                        jTextArea.setBackground(Color.RED);
+                        jTextArea.setBorder(border_old);
+                    }
                 }
                 else{
                     jTextArea.setBackground(Color.BLACK);
@@ -277,19 +278,14 @@ public class Window {
         Action Enter = new EnterAction();
         b1.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "EnterAction");
         b1.getActionMap().put("EnterAction", Enter);  // Perform an action when Enter Key is pressed.
-        //public void EnterAction(){
 
-        //window.setLayout(new GridLayout(4,4));
         window.setVisible(true);
 
 
         canvaspanel.setSize(1225, 1225);
-        //lpane.setOpaque(true);
         lpane.add(canvaspanel, new Integer(0), 0);
-        //graphig.setBounds(200, 100, 100, 100);
 
         window.add(lpane, BorderLayout.CENTER);
-        //System.out.println("ich bin hier : "+ lpane.getLocation());
         window.pack();
         /*
         for(int i = 0; i < canvaspanel.getComponentCount(); i++){
