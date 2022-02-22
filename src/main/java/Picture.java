@@ -1,6 +1,6 @@
 import org.apache.commons.lang3.time.StopWatch;
 
-import java.sql.SQLOutput;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Picture {
 
     //##########################################################################
     // Stelle Sie die blocksize ein (in Pixel). Es können mehrere Blocksizes in die Liste eingetragen werden.
-    Integer[] blocksizelist = {8, 16, 32};  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
+    Integer[] blocksizelist = {8, 16};  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
     //Integer[] blocksizelist = {8, 16}; // Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
     //Integer[] blocksizelist = {2, 4, 8, 16, 32, 64, 128}; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
     //##########################################################################
@@ -32,7 +32,7 @@ public class Picture {
 
     //##########################################################################
     // Stelle Sie die Geschwindigkeit der Animationselemente ein (in Millisekunden).
-    int Geschwindigkeit = 10000;
+    int Geschwindigkeit = 30000;
     //##########################################################################
 
     //##########################################################################

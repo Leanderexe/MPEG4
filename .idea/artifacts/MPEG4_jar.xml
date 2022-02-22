@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MPEG4:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MPEG4_jar</output-path>
+    <root id="archive" name="MPEG4.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="MPEG4" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/bytedeco/openblas/0.3.17-1.5.6/openblas-0.3.17-1.5.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/bytedeco/opencv/4.5.3-1.5.6/opencv-4.5.3-1.5.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/bytedeco/javacpp/1.5.6/javacpp-1.5.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
