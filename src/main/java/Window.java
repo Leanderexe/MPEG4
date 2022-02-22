@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,8 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Window {
@@ -19,7 +18,6 @@ public class Window {
     int number_of_blocks;
     int blocks_per_frame;
     JFrame window = new JFrame();
-    Picture pic = new Picture();
     JTextArea b1= new JTextArea();JTextArea b2=new JTextArea();JTextArea b3=new JTextArea();JTextArea b4=new JTextArea();JTextArea b5=new JTextArea();JTextArea b6=new JTextArea();
     JTextArea b7=new JTextArea();JTextArea b8=new JTextArea();JTextArea b9=new JTextArea();JTextArea b10=new JTextArea();JTextArea b11=new JTextArea();JTextArea b12=new JTextArea();
     JTextArea b13=new JTextArea();JTextArea b14=new JTextArea();JTextArea b15=new JTextArea();JTextArea b16=new JTextArea();JTextArea b17=new JTextArea();JTextArea b18=new JTextArea();
@@ -137,9 +135,9 @@ public class Window {
             counter += 1;
         }
 
-        Action Enter = new EnterAction();
-        b1.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "EnterAction");
-        b1.getActionMap().put("EnterAction", Enter);  // Perform an action when Enter Key is pressed.
+        //Action Enter = new EnterAction();
+        //b1.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "EnterAction");
+        //b1.getActionMap().put("EnterAction", Enter);  // Perform an action when Enter Key is pressed.
         //public void EnterAction(){
 
         window.setLayout(new GridLayout(number_of_blocks,number_of_blocks));
@@ -275,9 +273,7 @@ public class Window {
         }
         //window.add(lpane);
 
-        Action Enter = new EnterAction();
-        b1.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "EnterAction");
-        b1.getActionMap().put("EnterAction", Enter);  // Perform an action when Enter Key is pressed.
+
 
         window.setVisible(true);
 
@@ -492,6 +488,7 @@ public class Window {
         }
     }
 
+    /*
     public class EnterAction extends AbstractAction{
 
         @Override
@@ -517,6 +514,8 @@ public class Window {
             e.printStackTrace();
         }
     }
+
+     */
 
     public void close_window(){
         window.dispose();

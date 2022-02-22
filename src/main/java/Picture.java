@@ -20,7 +20,7 @@ public class Picture {
 
     //##########################################################################
     // Stelle Sie die blocksize ein (in Pixel). Es können mehrere Blocksizes in die Liste eingetragen werden.
-    Integer[] blocksizelist = {8, 16};  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
+    ArrayList<Integer> blocksizelist;  // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
     //Integer[] blocksizelist = {8, 16}; // Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
     //Integer[] blocksizelist = {2, 4, 8, 16, 32, 64, 128}; // Beispiel Animation = 0, zeigt Kompressionsfaktor im Vergleich zur Berechnungsdauer.
     //##########################################################################
@@ -38,6 +38,14 @@ public class Picture {
     //##########################################################################
     // Stelle Sie ein, ob es eine Animation geben soll. 0 = keine Animation, 1 = nur Richtungsvektoren anzeigen, 2 = Schritt für Schritt Animation des BMC.
     int animation = 2; // Beispiel Animation = 2, zeigt Schritt für Schritt den Block Motion Compensation Algorithmus.
+
+    public Picture(int res, int frame, int v, int ani, ArrayList<Integer> blocksize) {
+        resolution = res;
+        frames = frame;
+        Geschwindigkeit = v;
+        animation = ani;
+        blocksizelist = blocksize;
+    }
     //int animation = 1; // Beispiel Animation = 1, zeigt alle Richtungsvektoren an;
     //int animation = 0; // Beispiel Animation = 0, zeigt Kompressionsfaktoren im Vergleich zur Berechnungsdauer.
     //##########################################################################
@@ -46,8 +54,8 @@ public class Picture {
         // first Frame.
         build_frames();
         List comp_factor = new ArrayList();
-        for (int z = 0; z < blocksizelist.length; z++) {
-            Integer blocksize = blocksizelist[z];
+        for (int z = 0; z < blocksizelist.size(); z++) {
+            Integer blocksize = blocksizelist.get(z);
             comp_factor.clear();
             stopWatch.reset();
             for (int i = 0; i < frames; i++) {
